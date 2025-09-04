@@ -165,8 +165,15 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Obstacle"))
         {
+            Debug.Log("Abc");
+            Die();
+
+        }
+        else if (collision.gameObject.CompareTag("Ground"))
+        {
+            Debug.Log("Aaa");
             isGrounded = true;
         }
     }
@@ -174,22 +181,13 @@ public class PlayerController : MonoBehaviour
     // Karakter "Ground" etiketli bir şeyden AYRILDIĞI AN tetiklenir.
     private void OnCollisionExit2D(Collision2D collision)
     {
+
+
+
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = false;
         }
-        else if (collision.gameObject.CompareTag("Obstacle"))
-        {
-            // Eğer skill (dokunulmazlık) aktif değilse öl
-            if (!skillActive)
-            {
-                Die();
-            }
-            // Skill aktifse bir şey yapma, sadece log basabilirsin
-            else
-            {
-                Debug.Log("Skill sayesinde kurtuldu!");
-            }
-        }
+        
     }
 }
