@@ -25,6 +25,12 @@ public class PlayerController : MonoBehaviour
     private float skillTimer = 0f;
     private bool skillActive = false;
 
+    [Header("Ground Check")]
+    public Transform groundCheck;
+    public float groundCheckRadius = 0.2f;
+    public LayerMask whatIsGround;
+
+
     private Rigidbody2D rb;
     private bool isGrounded = true;
     private bool isSliding = false;
@@ -55,6 +61,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
+
+        // Diğer fonksiyonlar aynen kalıyor
         HandleMove();
         HandleJump();
         HandleSlide();
@@ -163,33 +172,12 @@ public class PlayerController : MonoBehaviour
         // Örneğin: GameManager.instance.GameOver();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Obstacle"))
         {
-            isGrounded = true;
-        }
-    }
+            Die();
 
-    // Karakter "Ground" etiketli bir şeyden AYRILDIĞI AN tetiklenir.
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = false;
-        }
-        else if (collision.gameObject.CompareTag("Obstacle"))
-        {
-            // Eğer skill (dokunulmazlık) aktif değilse öl
-            if (!skillActive)
-            {
-                Die();
-            }
-            // Skill aktifse bir şey yapma, sadece log basabilirsin
-            else
-            {
-                Debug.Log("Skill sayesinde kurtuldu!");
-            }
         }
     }
 }
